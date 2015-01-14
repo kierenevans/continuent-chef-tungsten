@@ -40,7 +40,7 @@ default['tungsten']['profileScript'] = '~/.bash_profile'
 
 default['tungsten']['homeDir'] = '/opt/continuent'
 default['tungsten']['prereqDirectories'] = [
-	"#{node['tungsten']['homeDir']}",
+	node['tungsten']['homeDir'],
 	"#{node['tungsten']['homeDir']}/software",
 	"#{node['tungsten']['homeDir']}/service_logs",
 	'/opt/replicator',
