@@ -22,14 +22,14 @@ default['tungsten']['clusterSoftwareSource'] = 'https://s3.amazonaws.com/release
 default['tungsten']['clusterSoftwareChecksum'] = 'b8ea78762f66a9c9b8ca7e884ae310083981f1fb'
 
 default['tungsten']['prereqPackages'] = [
-	'ruby18',
-	'rubygems18',
-	'rubygem18-aws-sdk',
-	'ruby18-devel',
-	'wget',
-	'sudo',
-	'rsync',
-	'mysql'
+  'ruby18',
+  'rubygems18',
+  'rubygem18-aws-sdk',
+  'ruby18-devel',
+  'wget',
+  'sudo',
+  'rsync',
+  'mysql'
 ]
 
 default['tungsten']['clusterSoftwareDir'] = default['tungsten']['clusterSoftware'].gsub( /\.noarch\.rpm/, '' )
@@ -40,12 +40,12 @@ default['tungsten']['profileScript'] = '~/.bash_profile'
 
 default['tungsten']['homeDir'] = '/opt/continuent'
 default['tungsten']['prereqDirectories'] = [
-	node['tungsten']['homeDir'],
-	"#{node['tungsten']['homeDir']}/software",
-	"#{node['tungsten']['homeDir']}/service_logs",
-	'/opt/replicator',
-	'/etc/tungsten',
-	'/opt/mysql'
+  node['tungsten']['homeDir'],
+  "#{node['tungsten']['homeDir']}/software",
+  "#{node['tungsten']['homeDir']}/service_logs",
+  '/opt/replicator',
+  '/etc/tungsten',
+  '/opt/mysql'
 ]
 
 
@@ -80,32 +80,32 @@ default['tungsten']['mysqlIncrement'] = 10
 default['tungsten']['mysqlOffset'] = 1
 
 if node['platform'] =~ /(?i:centos|redhat|oel|amazon)/
-        default['tungsten']['mysqlServiceName']        = 'mysqld'
+  default['tungsten']['mysqlServiceName']        = 'mysqld'
 
-        default['tungsten']['mysqlConfigDir']          = '/etc'
-        default['tungsten']['mysqlConfigFile']         = "#{default['tungsten']['mysqlConfigDir']}/my.cnf"
+  default['tungsten']['mysqlConfigDir']          = '/etc'
+  default['tungsten']['mysqlConfigFile']         = "#{default['tungsten']['mysqlConfigDir']}/my.cnf"
 
-        default['tungsten']['mysqlDataDir']            = '/var/lib/mysql'
-        default['tungsten']['mysqlPIDFile']            = '/var/lib/mysql/mysqld.pid'
-        default['tungsten']['mysqlSocket']             = '/var/lib/mysql/mysql.sock'
+  default['tungsten']['mysqlDataDir']            = '/var/lib/mysql'
+  default['tungsten']['mysqlPIDFile']            = '/var/lib/mysql/mysqld.pid'
+  default['tungsten']['mysqlSocket']             = '/var/lib/mysql/mysql.sock'
 
-        #default['tungsten']['serverPackageName']      = 'Percona-Server-server-55'
-        #default['tungsten']['clientPackageName']      = 'Percona-Server-client-55'
+  #default['tungsten']['serverPackageName']      = 'Percona-Server-server-55'
+  #default['tungsten']['clientPackageName']      = 'Percona-Server-client-55'
 
 elsif node['platform'] =~ /(?i:debian|ubuntu)/
-        default['tungsten']['mysqlServiceName']        = 'mysql'
-        
-        default['tungsten']['mysqlConfigDir']          = '/etc/mysql'
-        default['tungsten']['mysqlConfigFile']         = '#{default['tungsten']['mysqlConfigDir']}/my.cnf'
+  default['tungsten']['mysqlServiceName']        = 'mysql'
+  
+  default['tungsten']['mysqlConfigDir']          = '/etc/mysql'
+  default['tungsten']['mysqlConfigFile']         = "#{default['tungsten']['mysqlConfigDir']}/my.cnf"
 
-        default['tungsten']['mysqlDataDir']            = '/var/lib/mysql'
-        default['tungsten']['mysqlPIDFile']            = '/var/run/mysqld/mysqld.pid'
-        default['tungsten']['mysqlSocket']             = '/var/run/mysqld/mysqld.sock'
+  default['tungsten']['mysqlDataDir']            = '/var/lib/mysql'
+  default['tungsten']['mysqlPIDFile']            = '/var/run/mysqld/mysqld.pid'
+  default['tungsten']['mysqlSocket']             = '/var/run/mysqld/mysqld.sock'
 
-        #default['tungsten']['serverPackageName']      = 'Percona-Server-server-5.5'
-        #default['tungsten']['clientPackageName']      = 'Percona-Server-client-5.5'
+  #default['tungsten']['serverPackageName']      = 'Percona-Server-server-5.5'
+  #default['tungsten']['clientPackageName']      = 'Percona-Server-client-5.5'
 else
-	default['tungsten']['installMysqlServer'] = false
+  default['tungsten']['installMysqlServer'] = false
 end
 
 default['tungsten']['sshPublicKey_custom'] = nil
@@ -141,9 +141,9 @@ j1a+DFw1im8X6ypaIR+3SxeSsJsCM23vhxT/C/jP09fWIEyAYsAF6OKT+k2Y8Dcr
 -----END RSA PRIVATE KEY-----'
 
 if node['platform'] == 'amazon'
-	default['tungsten']['installNTP']	= false
-else
-	default['tungsten']['installNTP']	= true
+  default['tungsten']['installNTP']	= false
+  else
+  default['tungsten']['installNTP']	= true
 end
 
 include_attribute "java"

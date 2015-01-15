@@ -28,19 +28,18 @@ if node['tungsten']['installJava'] == true
 end
 
 group node['tungsten']['systemUser'] do
-	action :create
-	gid 6000
+  action :create
+  gid 6000
 end
 
 user node['tungsten']['systemUser'] do
-	action :create
-	supports :manage_home => true
-	comment "Continuent Tungsten User"
-	uid 6000
-	gid 6000
-	home "/home/#{node['tungsten']['systemUser']}"
-	shell "/bin/bash"
-	#password "$1$JJsvHslV$szsCjVEroftprNn4JHtDi."
+  action :create
+  supports :manage_home => true
+  comment "Continuent Tungsten User"
+  uid 6000
+  gid 6000
+  home "/home/#{node['tungsten']['systemUser']}"
+  shell "/bin/bash"
 end
 
 directory "/home/#{node['tungsten']['systemUser']}" do
@@ -68,75 +67,75 @@ template "/home/#{node['tungsten']['systemUser']}/.bash_profile" do
 end
 
 node['tungsten']['prereqDirectories'].each do |dir|
-	directory dir do
-	  owner node['tungsten']['systemUser']
-	  group node['tungsten']['systemUser']
-	  mode 00750
-	  action :create
-	end
+  directory dir do
+    owner node['tungsten']['systemUser']
+    group node['tungsten']['systemUser']
+    mode 00750
+    action :create
+  end
 end
 
 template "/etc/sudoers.d/90_tungsten" do
-	only_if { File.directory?("/etc/sudoers.d") }
-	action :create
-	mode 00440
-	owner "root"
-	group "root"
-	source "tungsten_sudo.erb"
+  only_if { File.directory?("/etc/sudoers.d") }
+  action :create
+  mode 00440
+  owner "root"
+  group "root"
+  source "tungsten_sudo.erb"
 end
 
 template "/etc/security/limits.d/90tungsten.conf" do
-	only_if { File.directory?("/etc/security/limits.d") }
-	action :create
-	mode 00440
-	owner "root"
-	group "root"
-	source "tungsten_security_limits.erb"
+  only_if { File.directory?("/etc/security/limits.d") }
+  action :create
+  mode 00440
+  owner "root"
+  group "root"
+  source "tungsten_security_limits.erb"
 end
 
 execute "remove-requiretty" do
-	command "/bin/sed -i '/requiretty/s/^Defaults/#Defaults/' /etc/sudoers"
-	only_if "/bin/grep requiretty /etc/sudoers | /bin/egrep -v \"^#\""
+  command "/bin/sed -i '/requiretty/s/^Defaults/#Defaults/' /etc/sudoers"
+  only_if "/bin/grep requiretty /etc/sudoers | /bin/egrep -v \"^#\""
 end
 
 cookbook_file "mysql-connector-java-5.1.26-bin.jar" do
-	path node['tungsten']['mysqljLocation']
-	owner node['tungsten']['systemUser']
-	group node['tungsten']['systemUser']
-	mode 00644
-	action :create_if_missing
-	only_if { node['tungsten']['installMysqlj'] == true }
+  path node['tungsten']['mysqljLocation']
+  owner node['tungsten']['systemUser']
+  group node['tungsten']['systemUser']
+  mode 00644
+  action :create_if_missing
+  only_if { node['tungsten']['installMysqlj'] == true }
 end
 
 file "/selinux/enforcing" do
-	owner "root"
-	mode 00600
-	content "0"
-	only_if { node['tungsten']['disableSELinux'] == true }
+  owner "root"
+  mode 00600
+  content "0"
+  only_if { node['tungsten']['disableSELinux'] == true }
 end
 
 if node['tungsten']['installSSHKeys'] == true
 
-	file "/home/#{node['tungsten']['systemUser']}/.ssh/id_rsa" do
-		mode 00600
-		owner node['tungsten']['systemUser']
-		content node['tungsten']['sshPrivateKey']
-		only_if { File.directory?("/home/#{node['tungsten']['systemUser']}/.ssh") }
-	end
+  file "/home/#{node['tungsten']['systemUser']}/.ssh/id_rsa" do
+    mode 00600
+    owner node['tungsten']['systemUser']
+    content node['tungsten']['sshPrivateKey']
+    only_if { File.directory?("/home/#{node['tungsten']['systemUser']}/.ssh") }
+  end
 
-	file "/home/#{node['tungsten']['systemUser']}/.ssh/id_rsa.pub" do
-		mode 00600
-		owner node['tungsten']['systemUser']
-		content "ssh-rsa #{node['tungsten']['sshPublicKey']}"
-		only_if { File.directory?("/home/#{node['tungsten']['systemUser']}/.ssh") }
-	end
+  file "/home/#{node['tungsten']['systemUser']}/.ssh/id_rsa.pub" do
+    mode 00600
+    owner node['tungsten']['systemUser']
+    content "ssh-rsa #{node['tungsten']['sshPublicKey']}"
+    only_if { File.directory?("/home/#{node['tungsten']['systemUser']}/.ssh") }
+  end
 
-	file "/home/#{node['tungsten']['systemUser']}/.ssh/authorized_keys" do
-		mode 00600
-		owner node['tungsten']['systemUser']
-		content "ssh-rsa #{node['tungsten']['sshPublicKey']} #{node['tungsten']['systemUser']}"
-		only_if { File.directory?("/home/#{node['tungsten']['systemUser']}/.ssh") }
-	end
+  file "/home/#{node['tungsten']['systemUser']}/.ssh/authorized_keys" do
+    mode 00600
+    owner node['tungsten']['systemUser']
+    content "ssh-rsa #{node['tungsten']['sshPublicKey']} #{node['tungsten']['systemUser']}"
+    only_if { File.directory?("/home/#{node['tungsten']['systemUser']}/.ssh") }
+  end
 
 end
 
@@ -156,5 +155,5 @@ end
 
 execute "removeAnonUsers" do
   command "/usr/bin/mysql --defaults-file=#{node['tungsten']['rootHome']}/.my.cnf -Be \"delete from mysql.user where user='';flush privileges;\""
-  only_if	{ File.exists?("#{node['tungsten']['rootHome']}/.my.cnf") && "/usr/bin/test -f /usr/bin/mysql" && "/usr/bin/test `/usr/bin/mysql --defaults-file=#{node['tungsten']['rootHome']}/.my.cnf -Be \"select * from mysql.user where user='';\"|wc -l` -gt 0" }
+  only_if { File.exists?("#{node['tungsten']['rootHome']}/.my.cnf") && "/usr/bin/test -f /usr/bin/mysql" && "/usr/bin/test `/usr/bin/mysql --defaults-file=#{node['tungsten']['rootHome']}/.my.cnf -Be \"select * from mysql.user where user='';\"|wc -l` -gt 0" }
 end

@@ -24,11 +24,11 @@ unless node['platform'] =~ /(?i:centos|redhat|oel|amazon|debian|ubuntu)/
 end
 
 template node['tungsten']['mysqlConfigFile'] do
-	mode 00644
-	source "tungsten_my_cnf.erb"
-        owner "root"
-        group "root"
-        action :create
+  mode 00644
+  source "tungsten_my_cnf.erb"
+  owner "root"
+  group "root"
+  action :create
 end
 
 directory "/etc/mysql" do
@@ -46,27 +46,26 @@ directory "/etc/mysql/conf.d" do
 end
 
 service "mysqld" do
-	action :start
-	only_if { File.exists?(node['tungsten']['mysqlConfigFile']) }
+  action :start
+  only_if { File.exists?(node['tungsten']['mysqlConfigFile']) }
 end
 
 group "mysql" do
-	action :manage
-	append true
-	members node['tungsten']['systemUser']
+  action :manage
+  append true
+  members node['tungsten']['systemUser']
 end
 
 execute "tungsten_set_mysql_admin_password" do
-	path ["/bin", "/usr/bin"]
-        command "mysqladmin -u#{node['tungsten']['mysqlAdminUser']} password #{node['tungsten']['mysqlAdminPassword']}"
-	only_if	{ "/usr/bin/test -f /usr/bin/mysql" && "/usr/bin/mysql -u {node['tungsten']['mysqlAdminUser']}" }
+  path ["/bin", "/usr/bin"]
+  command "mysqladmin -u#{node['tungsten']['mysqlAdminUser']} password #{node['tungsten']['mysqlAdminPassword']}"
+  only_if { "/usr/bin/test -f /usr/bin/mysql" && "/usr/bin/mysql -u {node['tungsten']['mysqlAdminUser']}" }
 end
 
 template "#{node['tungsten']['rootHome']}/.my.cnf" do
-	mode 00600
-	source "tungsten_root_my_cnf.erb"
-        owner "root"
-        group "root"
-        action :create
-	#not_if { File.exists?("#{node['tungsten']['rootHome']}/.my.cnf") }
+  mode 00600
+  source "tungsten_root_my_cnf.erb"
+  owner "root"
+  group "root"
+  action :create
 end
