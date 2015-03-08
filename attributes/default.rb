@@ -16,7 +16,13 @@
 # See the License for the specific language governing permissions and 
 # limitations under the License.
 #
-include_attribute 'mysql'
+include_attribute 'mysql::server'
+include_attribute 'mysql::server_debian'
+include_attribute 'mysql::server_freebsd'
+include_attribute 'mysql::server_mac_os_x'
+include_attribute 'mysql::server_rhel'
+include_attribute 'mysql::server_suse'
+include_attribute 'mysql::server_windows'
 
 default[:tungsten][:clusterSoftware] = 'continuent-tungsten-2.0.5-3.noarch.rpm'
 default[:tungsten][:clusterSoftwareSource] = 'https://s3.amazonaws.com/releases.continuent.com/ct-2.0.4/'
@@ -70,7 +76,7 @@ default[:tungsten][:master] = 'db1'
 default[:tungsten][:members] = 'db1'
 default[:tungsten][:connectors] = 'db1'
 
-default[:tungsten][:mysqlAdminUser] = node['mysql']['server_root_user']
+default[:tungsten][:mysqlAdminUser] = 'root'
 default[:tungsten][:mysqlAdminPassword] = node['mysql']['server_root_password']
 
 default[:tungsten][:rootHome] = File.expand_path('~root')
@@ -81,8 +87,6 @@ default[:tungsten][:mysqlServerID] = 101
 default[:tungsten][:mysqlBinlogFormat] = 'ROW'
 default[:tungsten][:mysqlIncrement] = 10
 default[:tungsten][:mysqlOffset] = 1
-
-default[:tungsten][:mysqlServiceName]        = node['mysql']['server']['service_name']
 
 default[:tungsten][:mysqlConfigDir]          = node['mysql']['server']['directories']['confd_dir']
 default[:tungsten][:mysqlConfigFile]         = "#{default[:tungsten][:mysqlConfigDir]}/tungsten.cnf"
